@@ -65,8 +65,11 @@ GET /api/v1.0/search' # Uses URL Parameters after search to perform custom searc
 # Example: http://localhost:5000/api/v1.0/search?subject=cmps&reg_status=all&term=2180
 GET /api/v1.0/open_courses' # Gets all open courses for the latest term
 GET /api/v1.0/open_courses/<int:num_of_results>' # Gets all open courses + overriding the default 25 search results
+# Example: http://localhost:5000/api/v1.0/open_courses/50
 GET /api/v1.0/courses/<string:status>' # Gets all courses, open/closed
+# Example: http://localhost:5000/api/v1.0/courses/all
 GET /api/v1.0/courses/<string:status>/<int:num_of_results>' #Gets all courses, open/closed, and number of results
+# Example: http://localhost:5000/api/v1.0/courses/all/50
 ```
 
 ## Libraries used
