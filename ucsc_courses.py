@@ -141,6 +141,8 @@ class API():
     @staticmethod
     @app.route('/api/v1.0/search', methods=['GET'])
     def search():
+
+        # See: https://stackoverflow.com/a/46321103 for reading uri queries and assigning default values
         action = request.args.get('ACTION', default="results", type=str)
         acad_career = request.args.get('acad_career', default='', type=str)
         catalog_nbr_op = request.args.get('catalog_nbr_op', default='=', type=str)
