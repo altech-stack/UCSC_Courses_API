@@ -10,7 +10,7 @@ from logger_helper import LoggerHelpers
 # - auth - http://flask-httpauth.readthedocs.io/en/latest/
 
 class Helpers():
-    # Function that finds the
+    # Function that finds the substring between two strings
     def find_between(self, s, first, last):
         try:
             start = s.index(first) + len(first)
@@ -19,14 +19,20 @@ class Helpers():
         except ValueError:
             return ""
 
+    # Helper function that loads json files for me.
     def load_json_file(self, filepath):
         with open(filepath, 'rb') as f:
             json_data = json.loads(f.read())
         return json_data
 
 class ConfigObject():
+    # Specifies API Endpoint for class search data
     api_endpoint = "https://pisa.ucsc.edu/class_search/index.php"
+
+    # Loads default payload needed to send POST parameters to class search endpoint
     default_payload = Helpers.load_json_file(Helpers, '{}/payload.json'.format(os.getcwd()))
+
+    # Initializes custom logging solution.. really helpful
     logger = LoggerHelpers()
 
 class CourseParser():
