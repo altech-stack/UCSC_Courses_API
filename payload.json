@@ -1,0 +1,19 @@
+{
+       "action": "results",
+      "binds[:acad_career]":"",
+      "binds[:catalog_nbr_op]":"=",
+      "binds[:catalog_nbr]":"",
+      "binds[:crse_units_exact]":"",
+      "binds[:crse_units_from]":"",
+      "binds[:crse_units_op]":"=",
+      "binds[:crse_units_to]":"",
+      "binds[:days]":"",
+      "binds[:ge]":"",
+      "binds[:instr_name_op]":"=",
+      "binds[:instructor]":"",
+      "binds[:reg_status]":"O",
+      "binds[:subject]":"",
+      "binds[:term]":2182,
+      "binds[:times]":"",
+      "binds[:title]":""
+}
