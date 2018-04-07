@@ -315,14 +315,15 @@ class API():
             return jsonify({
                 'msg': 'Your only choices in this endpoint is /open or /all, otherwise, just use /open_courses'
             })
-
+        
+        bind_term = request.args.get('term', default=CourseParser.get_term_info()[0].get('term_id'), type=str)
         custom_payload = {
             "action": "update_segment",
             "binds[:catalog_nbr_op]:": "=",
             "binds[:crse_units_op]:": "=",
             "binds[:instr_name_op]:": "=",
             "binds[:reg_status]:": str(reg_status),
-            "binds[:term]:": CourseParser.get_term_info()[0].get('term_id'),
+            "binds[:term]:":bind_term,
             "rec_dur": num_of_results
         }
 
