@@ -62,7 +62,7 @@ class CourseParser():
             # Grab relevant data, heavily relying on html elements ( this may change a lot as the HTML page changes )
             filtered_entry = Helpers.find_between(Helpers,entries,'<div class="panel-heading panel-heading-custom"><H2 style="margin:0px;">', 'Materials</a></div>')
             filtered_json = {}
-            print( filtered_entry)
+            print(f'filtered html entry: {filtered_entry}')
             descriptive_link = Helpers.find_between(Helpers, filtered_entry, 'href = "index.php?', '"')
             class_name = Helpers.find_between(Helpers, filtered_entry, '{}">'.format(descriptive_link), '</a>')
             title = Helpers.find_between(Helpers, filtered_entry, 'title="', '"')
@@ -70,9 +70,8 @@ class CourseParser():
             class_id = Helpers.find_between(Helpers,filtered_entry,'<a id="','"').replace('class_id_','')
             instructor = Helpers.find_between(Helpers, filtered_entry, 'Instructor:</i>', '</div>')
             location = Helpers.find_between(Helpers, filtered_entry, 'Location:</i>', '</div>')
-            date_time = Helpers.find_between(Helpers, filtered_entry, 'Day and Time:</i>', '</div>')
-            enrolled = Helpers.find_between(Helpers, filtered_entry, '{}</div> <div class="col-xs-6 col-sm-3"> '.format(date_time), '</div')
-
+            date_time = Helpers.find_between(Helpers, filtered_entry, 'Day and Time:</i> ', '  </div>')
+            enrolled = Helpers.find_between(Helpers, filtered_entry, f'{date_time}  </div>  </div>  <div class="col-xs-6 col-sm-3"> ', 'Enrolled</div')
             # Parse into JSON document
             filtered_json['status'] = title
             filtered_json['link_sources'] = link_sources
