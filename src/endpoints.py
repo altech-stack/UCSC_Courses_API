@@ -70,7 +70,8 @@ def search():
         "binds[:subject]": subject.upper(),
         "binds[:term]": term,
         "binds[:times]": times,
-        "binds[:title]": title
+        "binds[:title]": title,
+        "rec_dur":int(request.args.get('count', 100))
     }
     results = CourseParser.parse_classes_page(courses_injection)
 
