@@ -1,5 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
+import json
 
 class LoggerHelpers():
     def __init__(self):
@@ -25,3 +26,19 @@ class LoggerHelpers():
         # There's a chance the developer could forget the severity levels.
         else:
             self.logger.info(msg)
+
+class Helpers():
+    # Function that finds the substring between two strings
+    def find_between(self, s, first, last):
+        try:
+            start = s.index(first) + len(first)
+            end = s.index(last, start)
+            return s[start:end]
+        except ValueError:
+            return ""
+
+    # Helper function that loads json files for me.
+    def load_json_file(self, filepath):
+        with open(filepath, 'rb') as f:
+            json_data = json.loads(f.read())
+        return json_data
