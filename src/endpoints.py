@@ -50,7 +50,8 @@ def search():
         "subject": subject,
         "term": term,
         "times": times,
-        "title": title
+        "title": title,
+        'type': request.args.get('type', 'all')
     }
 
     courses_injection = {
@@ -92,13 +93,11 @@ def courses():
     # tab, and then search for classes on https://pisa.ucsc.edu/class_search
     print(CourseParser.get_term_info()[0])
     custom_payload = {
-        "binds[:catalog_nbr_op]:": "=",
-        "binds[:crse_units_op]:": "=",
-        "binds[:instr_name_op]:": "=",
         "binds[:term]:": CourseParser.get_term_info()[0].get('term_id'),
+        "binds[:subject]": request.args.get('subject', '').upper(),
+        "binds[:reg_status]": request.args.get('reg_status', 'all'),
         "rec_dur": request.args.get('count', 25),
-        "subject": request.args.get('subject', ''),
-        "reg_status": request.args.get('reg_status', 'all')
+        'type': request.args.get('type', 'all')
     }
     # Combines two dictionaries together
     # See: https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression
@@ -106,7 +105,30 @@ def courses():
 
     results = CourseParser.parse_classes_page(open_courses_payload)
 
-    return jsonify(results)
+    return jsonify({'payload':results, 'query':custom_payload})
+
+@app.route('/api/v1.0/courses/<string:subject>', methods=['GET'])
+def get_subject(subject):
+    ConfigObject.logger.log_msg(f'Query for all {subject} courses', 'INFO')
+    default_payload = ConfigObject.default_payload
+
+    # You can derive this payload using the Inspect Element feature, navigate to the Networks
+    # tab, and then search for classes on https://pisa.ucsc.edu/class_search
+    print(CourseParser.get_term_info()[0])
+    custom_payload = {
+        "binds[:term]:": CourseParser.get_term_info()[0].get('term_id'),
+        "binds[:subject]": subject.upper(),
+        "binds[:reg_status]": request.args.get('reg_status', 'all'),
+        "rec_dur": request.args.get('count', 25),
+        'type': request.args.get('type', 'all')
+    }
+    # Combines two dictionaries together
+    # See: https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression
+    open_courses_payload = {**default_payload, **custom_payload}
+
+    results = CourseParser.parse_classes_page(open_courses_payload)
+
+    return jsonify({'payload':results, 'query':custom_payload})
 
 @app.route('/api/v1.0/course/<string:course>', methods=['GET'])
 def find_course(course):
@@ -128,7 +150,7 @@ def find_course(course):
 
     results = CourseParser.parse_classes_page(open_courses_payload)
 
-    return jsonify(results)
+    return jsonify({'payload':results, 'query':custom_payload})
 
 ### error handling
 @app.errorhandler(404)

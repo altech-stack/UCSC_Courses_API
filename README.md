@@ -39,7 +39,7 @@ python ucsc_courses.py
 
 By default, the API server runs on port 5000. You can view a sample endpoint below: 
 ```
-http://localhost:5000/api/v1.0/courses/all
+http://localhost:5000/api/v1.0/courses
 
 ```
 And you will receive (redacted) the following sample JSON:
@@ -62,7 +62,7 @@ And you will receive (redacted) the following sample JSON:
 
 Or, you can run a bash command:
 ```
-curl http://localhost:5000/api/v1.0/courses/all
+curl http://localhost:5000/api/v1.0/courses
 ```
 
 ## Applications
@@ -75,7 +75,7 @@ curl http://localhost:5000/api/v1.0/courses/all
 There are a few endpoints available for students to play around with.
 
 ```
-GET /api/v1.0/get_term_info' # Gets all available term info
+GET /api/v1.0/terms' # Gets all available term info
  
 GET /api/v1.0/search' # Uses URL Parameters after search to perform custom searches
 # Example: http://localhost:5000/api/v1.0/search?subject=cmps&reg_status=all&term=2180
@@ -83,13 +83,19 @@ GET /api/v1.0/search' # Uses URL Parameters after search to perform custom searc
 GET /api/v1.0/open_courses' # Gets all open courses for the latest term
  
 GET /api/v1.0/open_courses/<int:num_of_results>' # Gets all open courses + overriding the default 25 search results
-# Example: http://localhost:5000/api/v1.0/open_courses/50
+# Example: http://localhost:5000/api/v1.0/courses?reg_status=open
  
 GET /api/v1.0/courses/<string:status>' # Gets all courses, open/closed
-# Example: http://localhost:5000/api/v1.0/courses/all
+# Example: http://localhost:5000/api/v1.0/courses
  
-GET /api/v1.0/courses/<string:status>/<int:num_of_results>' #Gets all courses, open/closed, and number of results
-# Example: http://localhost:5000/api/v1.0/courses/all/50
+GET /api/v1.0/courses?count=50&reg_status=open' #Gets all courses, open/closed, and number of results
+# Example: http://localhost:5000/api/v1.0/courses?count=50
+
+GET /api/v1.0/courses/<subject>' #Gets courses for this specific subject (specify open, closed, upper, lower, grad in the data)
+# Example: http://localhost:5000/api/v1.0/courses/cse?type=upper&count=100
+
+GET /api/v1.0/course/<course_num>' #Gets all courses, open/closed, and number of results
+# Example: http://localhost:5000/api/v1.0/course/cse101
 ```
 
 ## Future Work

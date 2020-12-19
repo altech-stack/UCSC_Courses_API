@@ -44,6 +44,24 @@ class CourseParser():
 
     @staticmethod
     def parse_classes_page(payload):
+        if 'type' in payload:
+            course_type =payload['type']
+            if course_type == 'lower':
+                payload["binds[:catalog_nbr_op]"] = '<'
+                payload["binds[:catalog_nbr]"] = '100'
+            elif course_type == 'upper':
+                payload["binds[:catalog_nbr_op]"] = '>'
+                payload["binds[:catalog_nbr]"] = '99'
+            elif course_type == 'undergrad':
+                payload["binds[:catalog_nbr_op]"] = '<'
+                payload["binds[:catalog_nbr]"] = '200'
+            elif course_type == 'grade':
+                payload["binds[:catalog_nbr_op]"] = '>'
+                payload["binds[:catalog_nbr]"] =  '199'
+            else:
+                payload["binds[:catalog_nbr_op]"] = '='
+                payload["binds[:catalog_nbr]"] = ''
+            del payload['type']
         # Grabs the raw HTML page from the endpoint
         raw_html_results = requests.post(ConfigObject.api_endpoint,data=payload).text
 
