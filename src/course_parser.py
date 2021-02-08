@@ -43,6 +43,50 @@ class CourseParser():
         return term_array
 
     @staticmethod
+    def parse_request(request):
+        # See: https://stackoverflow.com/a/46321103 for reading uri queries and assigning default values
+        action = request.args.get('ACTION', default="results", type=str)
+        acad_career = request.args.get('acad_career', default='', type=str)
+        catalog_nbr_op = request.args.get('catalog_nbr_op', default='=', type=str)
+        catalog_nbr = request.args.get('catalog_nbr', default='', type=str)
+        crse_units_exact = request.args.get('crse_units_exact', default='', type=str)
+        crse_units_from = request.args.get('crse_units_from', default='', type=str)
+        crse_units_op = request.args.get('crse_units_op', default='=', type=str)
+        crse_units_to = request.args.get('crse_units_to', default='', type=str)
+        days = request.args.get('days', default='', type=str)
+        ge = request.args.get('ge', default='', type=str)
+        instr_name_op = request.args.get('instr_name_op', default='=', type=str)
+        instructor = request.args.get('instructor', default='', type=str)
+        reg_status = request.args.get('reg_status', default='O', type=str)
+        if reg_status == 'open': reg_status = 'O'
+        elif reg_status == 'closed': reg_status = 'C'
+        subject = request.args.get('subject', default='', type=str)
+        term = request.args.get('term', default=CourseParser.get_term_info()[0].get('term_id'), type=str)
+        times = request.args.get('times', default='', type=str)
+        title = request.args.get('title', default='', type=str)
+
+        return {
+            "action": action,
+            "binds[:acad_career]": acad_career,
+            "binds[:catalog_nbr_op]": catalog_nbr_op,
+            "binds[:catalog_nbr]": catalog_nbr,
+            "binds[:crse_units_exact]": crse_units_exact,
+            "binds[:crse_units_from]": crse_units_from,
+            "binds[:crse_units_op]": crse_units_op,
+            "binds[:crse_units_to]": crse_units_to,
+            "binds[:days]": days,
+            "binds[:ge]": ge,
+            "binds[:instr_name_op]": instr_name_op,
+            "binds[:instructor]": instructor,
+            "binds[:reg_status]": reg_status,
+            "binds[:subject]": subject.upper(),
+            "binds[:term]": term,
+            "binds[:times]": times,
+            "binds[:title]": title,
+            "rec_dur":int(request.args.get('count', 100))
+        }
+
+    @staticmethod
     def parse_classes_page(payload):
         if 'type' in payload:
             course_type =payload['type']

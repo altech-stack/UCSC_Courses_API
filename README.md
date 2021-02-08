@@ -12,20 +12,6 @@ First, fork the repo and then clone it from your repository.
 
 The codebase is written in Python 3.6. Make sure your workstation has python 3.6 installed.
 
-See: https://www.python.org/downloads/
-
-Please note: THIS WILL BREAK ON PYTHON 2.7, because of the way I handle a few quirks in the codebase. 
-
-
-Below is what I would do to make sure you're in a good spot.
-
-```
-cd /path/to/folder
-virtualenv --no-site-packages -p python3 venv
-source ./venv/bin/activate
-pip install -r requirements.txt
-```
-
 Requirements.txt should contain all of the libraries needed (there's not much) for this project.
 
 ## How to run
@@ -39,7 +25,7 @@ python ucsc_courses.py
 
 By default, the API server runs on port 5000. You can view a sample endpoint below: 
 ```
-http://localhost:5000/api/v1.0/courses
+http://localhost:5000/api/courses
 
 ```
 And you will receive (redacted) the following sample JSON:
@@ -62,7 +48,7 @@ And you will receive (redacted) the following sample JSON:
 
 Or, you can run a bash command:
 ```
-curl http://localhost:5000/api/v1.0/courses
+curl http://localhost:5000/api/courses
 ```
 
 ## Applications
@@ -72,35 +58,56 @@ curl http://localhost:5000/api/v1.0/courses
 
 ## Available Endpoints to Play Around With
 
-There are a few endpoints available for students to play around with.
+There are a few endpoints available for students to play around with. Checkout src/endpoints.py to see all of the endpoints for this project. It lacks a description, but those are all of the endpoints
 
 ```
-GET /api/v1.0/terms' # Gets all available term info
+GET /api/terms' # Gets all available term info
  
-GET /api/v1.0/search' # Uses URL Parameters after search to perform custom searches
-# Example: http://localhost:5000/api/v1.0/search?subject=cmps&reg_status=all&term=2180
+GET /api/search' # Uses URL Parameters after search to perform custom searches
+# Example: http://localhost:5000/api/search?subject=cmps&reg_status=all&term=2180
  
-GET /api/v1.0/open_courses' # Gets all open courses for the latest term
+# Example: http://localhost:5000/api/courses?reg_status=open
  
-GET /api/v1.0/open_courses/<int:num_of_results>' # Gets all open courses + overriding the default 25 search results
-# Example: http://localhost:5000/api/v1.0/courses?reg_status=open
+GET /api/courses/<string:status>' # Gets all courses, open/closed
+# Example: http://localhost:5000/api/courses
  
-GET /api/v1.0/courses/<string:status>' # Gets all courses, open/closed
-# Example: http://localhost:5000/api/v1.0/courses
- 
-GET /api/v1.0/courses?count=50&reg_status=open' #Gets all courses, open/closed, and number of results
-# Example: http://localhost:5000/api/v1.0/courses?count=50
+GET /api/courses?count=50&reg_status=open' #Gets all courses, open/closed, and number of results
+# Example: http://localhost:5000/api/courses?count=50
 
-GET /api/v1.0/courses/<subject>' #Gets courses for this specific subject (specify open, closed, upper, lower, grad in the data)
-# Example: http://localhost:5000/api/v1.0/courses/cse?type=upper&count=100
+GET /api/courses/<subject>' #Gets courses for this specific subject (specify open, closed, upper, lower, grad in the data)
+# Example: http://localhost:5000/api/courses/cse?type=upper&count=100
 
-GET /api/v1.0/course/<course_num>' #Gets all courses, open/closed, and number of results
-# Example: http://localhost:5000/api/v1.0/course/cse101
+GET /api/course/<course_num>' #Gets all courses, open/closed, and number of results
+# Example: http://localhost:5000/api/course/cse101
+
+
+EXAMPLE:
+http://localhost:5000/api/courses/cse?count=1
+{
+  "payload": [
+    {
+      "class_id": "44438", 
+      "class_name": "CSE 3 - 01   Personal Computers", 
+      "date_time": "TuTh 11:40AM-01:15PM", 
+      "descriptive_link": "action=detail&amp;class_data=YToyOntzOjU6IjpTVFJNIjtzOjQ6IjIyMTAiO3M6MTA6IjpDTEFTU19OQlIiO3M6NToiNDQ0MzgiO30%3D", 
+      "enrolled": "349 of 400 ", 
+      "instructor": " Moulds,G.B.", 
+      "link_sources": "https://pisa.ucsc.edu/cs9/prd/images/PS_CS_STATUS_OPEN_ICN_1.gif", 
+      "location": " LEC: Remote Instruction", 
+      "status": "Open"
+    }
+  ], 
+  "query": {
+    "binds[:reg_status]": "all", 
+    "binds[:subject]": "CSE", 
+    "binds[:term]:": "2210", 
+    "rec_dur": "1", 
+    "type": "all"
+  }
+}
 ```
 
 ## Future Work
-
-Obviously I only did some bare minimums to get the ball rolling, and to demonstrate how to get some basics like parsing, url queries, and requests. There are a few things that students can do to improve on this code:
 
 - Additional endpoints - Maybe an endpoint to search by teacher, or get a certain class across all terms, etc. 
 - Ongoing HTML parsing - UCSC's going to change their site all the time. One of the benefits of having a server is that if you have clients that depend on this type of data, you only need to change the server to fix the parsing, and leave the schema as is. 
